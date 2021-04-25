@@ -35,10 +35,10 @@ public class Main {
                 case '1':
                     sc = new Scanner(System.in);
                     System.out.print("Type any word: ");
-//                    String slangWord = sc.nextLine();
+                    String slangWord = sc.nextLine();
 
-//                    SearchBySlangWord(slangWord);
-                    break;
+                    SearchBySlangWord(slangWord);
+                    break; 
                 case '2':
                     System.out.println("lua chon 2");
                     break;
@@ -70,20 +70,17 @@ public class Main {
         }
     }
     
-//    public static void SearchBySlangWord(String key) {
-//        String res = slangWordList.get(key);
-//
-//        if (res != null) {
-//            String[] definitions = res.split("|");
-//
-//            for (String definition: definitions) {
-//                System.out.println("definition: " + definition);
-//            }
-////            System.out.println("======" + res);
-//        } else {
-//            System.out.println("Sorry, we couldn't find: " + slangWord);
-//        }
-//    }
+    public static void SearchBySlangWord(String key) {
+        List<String> definitions = slangWordList.get(key);
+
+        if (definitions.size() > 0) {
+            definitions.forEach(definition -> {
+                System.out.printf("=======%s\n", definition);
+            });
+        } else {
+            System.out.printf("Could not find %s\n", key);
+        }
+    }
     
     public static boolean isKeyExisted(String key) {
         return slangWordList.containsKey(key);
