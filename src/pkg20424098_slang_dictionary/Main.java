@@ -13,7 +13,7 @@ public class Main {
 
     public static void main(String[] args) {
         String luaChon;
-        FileHandler.LoadSlangWordListFromFile(slangWordList);
+        FileHandler.LoadSlangWordListFromFile(slangWordList, "");
         FileHandler.LoadSearchHistoryFromFile(historySearched);
 
         OUTER:
@@ -41,6 +41,9 @@ public class Main {
                     break;
                 case '2':
                     System.out.println("lua chon 2");
+                    break;
+                case '3':
+                    ShowHistory();
                     break;
                 case '6':
                     sc = new Scanner(System.in);
@@ -90,7 +93,11 @@ public class Main {
     }
     
     public static void ShowHistory() {
+        System.out.println("================= Search History ==================");
         
+        historySearched.forEach(word -> {
+            System.out.println(word);
+        });
     }
         
     public static boolean DeleteSlangWord(String deleteKey) {

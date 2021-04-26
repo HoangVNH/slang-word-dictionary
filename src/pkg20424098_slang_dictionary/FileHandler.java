@@ -16,9 +16,10 @@ public class FileHandler {
     private static final String SLANG_URL = "data/slang.txt";
     private static final String HISTORY_URL = "data/search_history.txt";
 
-    public static void LoadSlangWordListFromFile(HashMap<String, List<String>> slangWordList) {
+    public static void LoadSlangWordListFromFile(HashMap<String, List<String>> slangWordList, String slangUrl) {
         try {
-            FileReader fr = new FileReader(new File(SLANG_URL));
+            FileReader fr = new FileReader(new File(slangUrl.equals("") ? SLANG_URL : slangUrl));
+
             try (BufferedReader br = new BufferedReader(fr)) {
                 String line;
                 
@@ -32,6 +33,8 @@ public class FileHandler {
                         slangWordList.put(key, definitionList);
                     }
                 }
+                br.close();
+                fr.close();
             }
         } catch (IOException ex) {
             Logger.getLogger(FileHandler.class.getName()).log(Level.SEVERE, null, ex);
@@ -40,9 +43,9 @@ public class FileHandler {
     
     public static void WriteSlangWordListToFile(HashMap<String, List<String>> slangWordList) {
         try {
-            BufferedWriter bw;
-            try (FileWriter fw = new FileWriter(new File(SLANG_URL))) {
-                bw = new BufferedWriter(fw);
+            FileWriter fw = new FileWriter(new File(SLANG_URL));
+
+            try (BufferedWriter bw = new BufferedWriter(fw)) {
                 for (String key: slangWordList.keySet()) {
                     fw.write(key + "`");
                     List<String> temp = slangWordList.get(key);
@@ -58,8 +61,8 @@ public class FileHandler {
                     fw.write("\n");
                 }
                 fw.close();
+                bw.close();
             }
-            bw.close();
         } catch (IOException ex) {
             Logger.getLogger(FileHandler.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -67,16 +70,14 @@ public class FileHandler {
     
     public static void LoadSearchHistoryFromFile(List<String> historySearched) {
         try {
-            FileReader fr = new FileReader(new File(HISTORY_URL));
-            BufferedReader br = new BufferedReader(fr);
-            
-            String line;
-            
-            while((line = br.readLine()) != null) {
-                historySearched.add(line);
+            BufferedReader br;
+            try (FileReader fr = new FileReader(new File(HISTORY_URL))) {
+                br = new BufferedReader(fr);
+                String line;
+                while((line = br.readLine()) != null) {
+                    historySearched.add(line);
+                }
             }
-            
-            fr.close();
             br.close();
         } catch (IOException ex) {
             Logger.getLogger(FileHandler.class.getName()).log(Level.SEVERE, null, ex);
