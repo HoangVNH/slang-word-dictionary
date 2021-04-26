@@ -13,11 +13,12 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class FileHandler {
-    private static final String URL = "data/slang.txt";
+    private static final String SLANG_URL = "data/slang.txt";
+    private static final String HISTORY_URL = "data/search_history.txt";
 
     public static void LoadSlangWordListFromFile(HashMap<String, List<String>> slangWordList) {
         try {
-            FileReader fr = new FileReader(new File(URL));
+            FileReader fr = new FileReader(new File(SLANG_URL));
             try (BufferedReader br = new BufferedReader(fr)) {
                 String line;
                 
@@ -40,7 +41,7 @@ public class FileHandler {
     public static void WriteSlangWordListToFile(HashMap<String, List<String>> slangWordList) {
         try {
             BufferedWriter bw;
-            try (FileWriter fw = new FileWriter(new File(URL))) {
+            try (FileWriter fw = new FileWriter(new File(SLANG_URL))) {
                 bw = new BufferedWriter(fw);
                 for (String key: slangWordList.keySet()) {
                     fw.write(key + "`");
@@ -56,6 +57,41 @@ public class FileHandler {
                     
                     fw.write("\n");
                 }
+                fw.close();
+            }
+            bw.close();
+        } catch (IOException ex) {
+            Logger.getLogger(FileHandler.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    public static void LoadSearchHistoryFromFile(List<String> historySearched) {
+        try {
+            FileReader fr = new FileReader(new File(HISTORY_URL));
+            BufferedReader br = new BufferedReader(fr);
+            
+            String line;
+            
+            while((line = br.readLine()) != null) {
+                historySearched.add(line);
+            }
+            
+            fr.close();
+            br.close();
+        } catch (IOException ex) {
+            Logger.getLogger(FileHandler.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    public static void WriteSeachHistoryToFile(List<String> historySearched) {
+        try {
+            BufferedWriter bw;
+            try (FileWriter fw = new FileWriter(new File(HISTORY_URL))) {
+                bw = new BufferedWriter(fw);
+                for (String searchedWord: historySearched) {
+                    fw.write(searchedWord + "\n");
+                }
+                fw.close();
             }
             bw.close();
         } catch (IOException ex) {

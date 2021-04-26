@@ -11,12 +11,11 @@ public class Main {
     static HashMap<String, List<String>> slangWordList = new HashMap<String, List<String>>();
     static List<String> historySearched = new ArrayList();
 
-    static String searchHistoryUrl = "data/search_history.txt";
-
-    public static void main(String[] args) {        
-        String luaChon;    
+    public static void main(String[] args) {
+        String luaChon;
         FileHandler.LoadSlangWordListFromFile(slangWordList);
-        
+        FileHandler.LoadSearchHistoryFromFile(historySearched);
+
         OUTER:
         while (true) {
             System.out.println("================= Slang Word Dictionary ==================");
@@ -28,6 +27,7 @@ public class Main {
             System.out.println("6. Delete a slang word");
             System.out.println("7. Reset to original slang word list");
             System.out.println("8. Random a slang word (On this day slang word)");
+            System.out.println("Other. Exit the program");
             System.out.print("Choose an option: ");
             luaChon = sc.nextLine();
 
@@ -38,7 +38,7 @@ public class Main {
                     String slangWord = sc.nextLine();
 
                     SearchBySlangWord(slangWord);
-                    break; 
+                    break;
                 case '2':
                     System.out.println("lua chon 2");
                     break;
@@ -47,7 +47,7 @@ public class Main {
                     System.out.print("Type a word to delete: ");
                     String deleteKey = sc.nextLine();
                     Boolean isExisted = isKeyExisted(deleteKey);
-                    
+
                     if (isExisted) {
                         System.out.printf("Are you sure that you want to delete %s? (Y/N): ", deleteKey);
                         String ans = sc.nextLine();
@@ -64,6 +64,7 @@ public class Main {
                     break;
                 default:
                     FileHandler.WriteSlangWordListToFile(slangWordList);
+                    FileHandler.WriteSeachHistoryToFile(historySearched);
                     System.out.println("exiting...");
                     break OUTER;
             }
@@ -72,6 +73,8 @@ public class Main {
     
     public static void SearchBySlangWord(String key) {
         List<String> definitions = slangWordList.get(key);
+        
+        historySearched.add(key);
 
         if (definitions.size() > 0) {
             definitions.forEach(definition -> {
