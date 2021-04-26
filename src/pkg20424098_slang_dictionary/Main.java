@@ -42,7 +42,11 @@ public class Main {
                     SearchBySlangWord(slangWord);
                     break;
                 case "2":
-                    System.out.println("lua chon 2");
+                    sc = new Scanner(System.in);
+                    System.out.print("Type any definition: ");
+                    String definition = sc.nextLine();
+
+                    SearchByDefinition(definition);
                     break;
                 case "3":
                     ShowHistory();
@@ -84,9 +88,9 @@ public class Main {
     }
     
     public static void SearchBySlangWord(String key) {
-        List<String> definitions = slangWordList.get(key);
-        
         historySearched.add(key);
+        
+        List<String> definitions = slangWordList.get(key);
 
         if (definitions != null && definitions.size() > 0) {
             definitions.forEach(definition -> {
@@ -94,6 +98,26 @@ public class Main {
             });
         } else {
             System.out.println("Could not find " + key);
+        }
+    }
+    
+    public static void SearchByDefinition(String definition) {
+        historySearched.add(definition);
+
+        List<String> words = new ArrayList();
+        
+        for (String slangWord: slangWordList.keySet()) {
+            if (slangWordList.get(slangWord).contains(definition)) {
+                words.add(slangWord);
+            }
+        }
+
+        if (words.size() > 0) {
+            words.forEach(word -> {
+                System.out.println("=======" + word);
+            });
+        } else {
+            System.out.println("Could not find " + definition);
         }
     }
     
