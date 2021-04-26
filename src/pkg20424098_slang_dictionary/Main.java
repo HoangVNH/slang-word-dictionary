@@ -19,33 +19,35 @@ public class Main {
         OUTER:
         while (true) {
             System.out.println("================= Slang Word Dictionary ==================");
-            System.out.println("1. Search by slang word");
-            System.out.println("2. Search by definition");
-            System.out.println("3. Show history");
-            System.out.println("4. Add new slang word");
-            System.out.println("5. Edit a slang word");
-            System.out.println("6. Delete a slang word");
-            System.out.println("7. Reset to original slang word list");
-            System.out.println("8. Random a slang word (On this day slang word)");
-            System.out.println("Other. Exit the program");
-            System.out.print("Choose an option: ");
+            System.out.println("======================== Menu ============================");
+            System.out.println("1) Search by slang word");
+            System.out.println("2) Search by definition");
+            System.out.println("3) Show history");
+            System.out.println("4) Add new slang word");
+            System.out.println("5) Edit a slang word");
+            System.out.println("6) Delete a slang word");
+            System.out.println("7) Reset to original slang word list");
+            System.out.println("8) Random a slang word (On this day slang word)");
+            System.out.println("9) Exit");
+            System.out.println("===========================================================");
+            System.out.print("Select an option -> ");
             luaChon = sc.nextLine();
 
-            switch (luaChon.charAt(0)) {
-                case '1':
+            switch (luaChon) {
+                case "1":
                     sc = new Scanner(System.in);
                     System.out.print("Type any word: ");
                     String slangWord = sc.nextLine();
 
                     SearchBySlangWord(slangWord);
                     break;
-                case '2':
+                case "2":
                     System.out.println("lua chon 2");
                     break;
-                case '3':
+                case "3":
                     ShowHistory();
                     break;
-                case '6':
+                case "6":
                     sc = new Scanner(System.in);
                     System.out.print("Type a word to delete: ");
                     String deleteKey = sc.nextLine();
@@ -65,10 +67,17 @@ public class Main {
                         System.out.printf("Could not find %s!\n", deleteKey);
                     }
                     break;
+                case "7":
+                    String originalSlangListUrl = "data/original_slang.txt";
+                    slangWordList.clear();
+
+                    FileHandler.LoadSlangWordListFromFile(slangWordList, originalSlangListUrl);
+                    System.out.println("Reset data to inital value successfully!");
+                    break;
                 default:
                     FileHandler.WriteSlangWordListToFile(slangWordList);
                     FileHandler.WriteSeachHistoryToFile(historySearched);
-                    System.out.println("exiting...");
+                    System.out.println("Saving...");
                     break OUTER;
             }
         }
@@ -79,12 +88,12 @@ public class Main {
         
         historySearched.add(key);
 
-        if (definitions.size() > 0) {
+        if (definitions != null && definitions.size() > 0) {
             definitions.forEach(definition -> {
-                System.out.printf("=======%s\n", definition);
+                System.out.println("=======" + definition);
             });
         } else {
-            System.out.printf("Could not find %s\n", key);
+            System.out.println("Could not find " + key);
         }
     }
     

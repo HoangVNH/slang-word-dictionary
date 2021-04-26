@@ -17,8 +17,10 @@ public class FileHandler {
     private static final String HISTORY_URL = "data/search_history.txt";
 
     public static void LoadSlangWordListFromFile(HashMap<String, List<String>> slangWordList, String slangUrl) {
+        String url = slangUrl.isEmpty() ? SLANG_URL : slangUrl;
+
         try {
-            FileReader fr = new FileReader(new File(slangUrl.equals("") ? SLANG_URL : slangUrl));
+            FileReader fr = new FileReader(new File(url));
 
             try (BufferedReader br = new BufferedReader(fr)) {
                 String line;
