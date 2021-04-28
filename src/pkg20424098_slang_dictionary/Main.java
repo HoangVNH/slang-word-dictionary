@@ -3,7 +3,9 @@ package pkg20424098_slang_dictionary;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Random;
 import java.util.Scanner;
+import java.util.Set;
 
 public class Main {
 
@@ -28,7 +30,9 @@ public class Main {
             System.out.println("6) Delete a slang word");
             System.out.println("7) Reset to original slang word list");
             System.out.println("8) Random a slang word (On this day slang word)");
-            System.out.println("9) Exit");
+            System.out.println("9) Random a slang word with answers (Quiz)");
+            System.out.println("10) Random a definition with answers (Quiz)");
+            System.out.println("11) Exit");
             System.out.println("===========================================================");
             System.out.print("Select an option -> ");
             luaChon = sc.nextLine();
@@ -84,6 +88,10 @@ public class Main {
                     slangWordList.clear();
                     FileHandler.LoadSlangWordListFromFile(slangWordList, originalSlangListUrl);
                     System.out.println("Reset data to inital value successfully!");
+                    break;
+                case "8":
+                    String randomSlangWord = RandomizeSlangWord();
+                    System.out.println("On this day slang word: " + randomSlangWord);
                     break;
                 default:
                     FileHandler.WriteSlangWordListToFile(slangWordList);
@@ -173,5 +181,22 @@ public class Main {
         }
 
         return false;
+    }
+    
+    public static String RandomizeSlangWord() {
+        int randomKey = (new Random().nextInt(slangWordList.size()));
+        String randomSlangWord = "";
+        int count = 0;
+        
+        for (String key: slangWordList.keySet()) {
+            if (count == randomKey) {
+                randomSlangWord = key;
+                break;
+            } else {
+                count++;
+            }
+        }
+        
+        return randomSlangWord;
     }
 }
