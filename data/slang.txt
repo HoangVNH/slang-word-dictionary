@@ -1792,7 +1792,7 @@ DTP`Disturbing The Peace
 NO`No Offence
 WAML`With All My Love
 DTS`Down The Shore| Down To Snuggle
-NP`No Problem
+NP`No Problem!!!|No Problem
 DTR`Define The Relationship
 NR`No Reply| No Reserve
 DTT`Don't Touch That
@@ -6113,7 +6113,7 @@ ASAYC`As Soon As You Can
 OMB`On My Break
 CAKE`Kilo of cocaine
 OMD`Oh My Days
-OMG`Oh My God
+OMG`Oh My God!!!
 OMJ`Oh My Jonas
 OML`Oh My Lord
 TBYS`Think Before You Speak

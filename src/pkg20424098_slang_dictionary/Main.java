@@ -38,19 +38,27 @@ public class Main {
                     sc = new Scanner(System.in);
                     System.out.print("Type any word: ");
                     String slangWord = sc.nextLine();
-
                     SearchBySlangWord(slangWord);
                     break;
-                case "2":
+                case "2": {
                     sc = new Scanner(System.in);
                     System.out.print("Type any definition: ");
                     String definition = sc.nextLine();
-
                     SearchByDefinition(definition);
                     break;
+                }
                 case "3":
                     ShowHistory();
                     break;
+                case "4": {
+                    sc = new Scanner(System.in);
+                    System.out.print("Type slang word to add: ");
+                    String key = sc.nextLine().toUpperCase();
+                    System.out.print("Type definition: ");
+                    String definition = sc.nextLine();
+                    AddNewSlangWord(key, definition);
+                    break;
+                }
                 case "6":
                     sc = new Scanner(System.in);
                     System.out.print("Type a word to delete: ");
@@ -60,7 +68,7 @@ public class Main {
                     if (isExisted) {
                         System.out.printf("Are you sure that you want to delete %s? (Y/N): ", deleteKey);
                         String ans = sc.nextLine();
-
+                        
                         if (ans.charAt(0) == 'Y' || ans.charAt(0) == 'y') {
                             String isDeleted = DeleteSlangWord(deleteKey) ? "Deleted successfully!" : "Could not delete this word";
                             System.out.println(isDeleted);
@@ -74,7 +82,6 @@ public class Main {
                 case "7":
                     String originalSlangListUrl = "data/original_slang.txt";
                     slangWordList.clear();
-
                     FileHandler.LoadSlangWordListFromFile(slangWordList, originalSlangListUrl);
                     System.out.println("Reset data to inital value successfully!");
                     break;
@@ -131,6 +138,32 @@ public class Main {
         historySearched.forEach(word -> {
             System.out.println(word);
         });
+    }
+    
+    public static void AddNewSlangWord(String key, String definition) {
+        List<String> definitions = new ArrayList();
+        definitions.add(definition);
+
+        if (slangWordList.containsKey(key)) {
+            System.out.printf("%s is already existed! Do you want to overwrite it? (Y/N): ", key);
+            String ans = sc.nextLine();
+            
+            if (ans.equals("y") || ans.equals("Y")) {
+                slangWordList.put(key, definitions);
+            } else {
+                List<String> definitionList = slangWordList.get(key);
+                
+                definitionList.forEach(def -> {
+                    definitions.add(def);
+                });
+                
+                slangWordList.put(key, definitions);
+            }
+        } else {
+            slangWordList.put(key, definitions);
+        }
+        
+        System.out.println("Added new slang word successfully!");
     }
         
     public static boolean DeleteSlangWord(String deleteKey) {
