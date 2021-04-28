@@ -92,6 +92,10 @@ public class Main {
                 case "8":
                     String randomSlangWord = RandomizeSlangWord();
                     System.out.println("On this day slang word: " + randomSlangWord);
+                    System.out.println("Definitions: ");
+                    slangWordList.get(randomSlangWord).forEach(def -> {
+                        System.out.println("============== " + def.trim());
+                    });
                     break;
                 default:
                     FileHandler.WriteSlangWordListToFile(slangWordList);
@@ -184,18 +188,8 @@ public class Main {
     }
     
     public static String RandomizeSlangWord() {
-        int randomKey = (new Random().nextInt(slangWordList.size()));
-        String randomSlangWord = "";
-        int count = 0;
-        
-        for (String key: slangWordList.keySet()) {
-            if (count == randomKey) {
-                randomSlangWord = key;
-                break;
-            } else {
-                count++;
-            }
-        }
+        Object[] keys = slangWordList.keySet().toArray();
+        String randomSlangWord = (String) keys[new Random().nextInt(keys.length)];
         
         return randomSlangWord;
     }
