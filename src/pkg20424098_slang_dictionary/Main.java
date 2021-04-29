@@ -115,6 +115,9 @@ public class Main {
                 case "9":
                     RandomizeSlangWordQuiz();
                     break;
+                case "10":
+                    RandomizeDefinitionQuiz();
+                    break;
                 case "11": {
                     FileHandler.WriteSlangWordListToFile(slangWordList);
                     FileHandler.WriteSeachHistoryToFile(historySearched);
@@ -191,7 +194,7 @@ public class Main {
             System.out.printf("%s is already existed! Do you want to overwrite it? (Y/N): ", key);
             String ans = sc.nextLine();
             
-            if (ans.equals("y") || ans.equals("Y")) {
+            if (ans.equalsIgnoreCase("y")) {
                 slangWordList.put(key, definitions);
             } else {
                 List<String> definitionList = slangWordList.get(key);
@@ -341,7 +344,54 @@ public class Main {
         } else if (ans.equalsIgnoreCase("d") && opt4.equals(answer)) {
             System.out.println("Correct!\n");
         } else {
-            System.out.println("Incorrect!\n");
+            System.out.printf("Incorrect! The answer is %s\n\n", answer);
+        }
+    }
+    
+    public static void RandomizeDefinitionQuiz() {
+        Random rand = new Random();
+        List<String> options = new ArrayList();
+        
+        String opt1 = RandomizeSlangWord().trim();
+        options.add(opt1);
+        String opt2 = RandomizeSlangWord().trim();
+        options.add(opt2);
+        String opt3 = RandomizeSlangWord().trim();
+        options.add(opt3);
+        String opt4 = RandomizeSlangWord().trim();
+        options.add(opt4);
+        
+        List<String> defitions = slangWordList.get(opt1);
+        String answer = opt1;
+        
+        System.out.printf("Question: What is the correct slang word of %s?\n", defitions.get(rand.nextInt(defitions.size())));
+        
+        opt1 = options.get(rand.nextInt(options.size()));
+        options.remove(opt1);
+        System.out.println("A. " + opt1);
+        opt2 = options.get(rand.nextInt(options.size()));
+        options.remove(opt2);
+        System.out.println("B. " + opt2);
+        opt3 = options.get(rand.nextInt(options.size()));
+        options.remove(opt3);
+        System.out.println("C. " + opt3);
+        opt4 = options.get(0);
+        options.clear();
+        System.out.println("D. " + opt4);
+        
+        System.out.print("Your answer is: ");
+        String ans = sc.nextLine();
+        
+        if (ans.equalsIgnoreCase("a") && opt1.equals(answer)) {
+            System.out.println("Correct!\n");
+        } else if (ans.equalsIgnoreCase("b") && opt2.equals(answer)) {
+            System.out.println("Correct!\n");
+        } else if (ans.equalsIgnoreCase("c") && opt3.equals(answer)) {
+            System.out.println("Correct!\n");
+        } else if (ans.equalsIgnoreCase("d") && opt4.equals(answer)) {
+            System.out.println("Correct!\n");
+        } else {
+            System.out.printf("Incorrect! The answer is %s\n\n", answer);
         }
     }
 }
