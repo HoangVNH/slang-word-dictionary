@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 import java.util.Scanner;
-import java.util.Set;
 
 public class Main {
 
@@ -21,33 +20,36 @@ public class Main {
         OUTER:
         while (true) {
             System.out.println("================= Slang Word Dictionary ==================");
+            System.out.println();
             System.out.println("======================== Menu ============================");
-            System.out.println("1) Search by slang word");
-            System.out.println("2) Search by definition");
-            System.out.println("3) Show history");
-            System.out.println("4) Add new slang word");
-            System.out.println("5) Edit a slang word");
-            System.out.println("6) Delete a slang word");
-            System.out.println("7) Reset to original slang word list");
-            System.out.println("8) Random a slang word (On this day slang word)");
-            System.out.println("9) Random a slang word with answers (Quiz)");
-            System.out.println("10) Random a definition with answers (Quiz)");
-            System.out.println("11) Exit");
+            System.out.println("Please enter a choice and press <Enter>");
+            System.out.println("\t1) Search by slang word");
+            System.out.println("\t2) Search by definition");
+            System.out.println("\t3) Show history");
+            System.out.println("\t4) Add new slang word");
+            System.out.println("\t5) Edit a slang word");
+            System.out.println("\t6) Delete a slang word");
+            System.out.println("\t7) Reset to original slang word list");
+            System.out.println("\t8) Random a slang word (On this day slang word)");
+            System.out.println("\t9) Random a slang word with answers (Quiz)");
+            System.out.println("\t10) Random a definition with answers (Quiz)");
+            System.out.println("\t11) Exit");
             System.out.println("===========================================================");
-            System.out.print("Select an option -> ");
+            System.out.print("Enter your choice: ");
             luaChon = sc.nextLine();
+            System.out.println();
 
             switch (luaChon) {
                 case "1":
                     sc = new Scanner(System.in);
                     System.out.print("Type any word: ");
-                    String slangWord = sc.nextLine();
+                    String slangWord = sc.nextLine().toUpperCase();
                     SearchBySlangWord(slangWord);
                     break;
                 case "2": {
                     sc = new Scanner(System.in);
                     System.out.print("Type any definition: ");
-                    String definition = sc.nextLine();
+                    String definition = sc.nextLine().toUpperCase();
                     SearchByDefinition(definition);
                     break;
                 }
@@ -63,16 +65,27 @@ public class Main {
                     AddNewSlangWord(key, definition);
                     break;
                 }
+                case "5":
+                    sc = new Scanner(System.in);
+                    System.out.print("Type slang word to edit: ");
+                    String key = sc.nextLine().toUpperCase();
+                    
+                    if (!isKeyExisted(key)) {
+                        System.out.println("Sorry, could not find " + key);
+                    } else {
+                        EditSlangWord(key);
+                    }
+                    break;
                 case "6":
                     sc = new Scanner(System.in);
                     System.out.print("Type a word to delete: ");
-                    String deleteKey = sc.nextLine();
+                    String deleteKey = sc.nextLine().toUpperCase();
                     Boolean isExisted = isKeyExisted(deleteKey);
 
                     if (isExisted) {
                         System.out.printf("Are you sure that you want to delete %s? (Y/N): ", deleteKey);
                         String ans = sc.nextLine();
-                        
+
                         if (ans.charAt(0) == 'Y' || ans.charAt(0) == 'y') {
                             String isDeleted = DeleteSlangWord(deleteKey) ? "Deleted successfully!" : "Could not delete this word";
                             System.out.println(isDeleted);
@@ -82,6 +95,7 @@ public class Main {
                     } else {
                         System.out.printf("Could not find %s!\n", deleteKey);
                     }
+                    System.out.println();
                     break;
                 case "7":
                     String originalSlangListUrl = "data/original_slang.txt";
@@ -96,12 +110,16 @@ public class Main {
                     slangWordList.get(randomSlangWord).forEach(def -> {
                         System.out.println("============== " + def.trim());
                     });
+                    System.out.println();
                     break;
-                default:
+                case "11": {
                     FileHandler.WriteSlangWordListToFile(slangWordList);
                     FileHandler.WriteSeachHistoryToFile(historySearched);
-                    System.out.println("Saving...");
+                    System.out.println("Saving data to files...\n");
                     break OUTER;
+                }
+                default:
+                    System.out.println("Invalid operation! Please try again...\n");
             }
         }
     }
@@ -109,15 +127,18 @@ public class Main {
     public static void SearchBySlangWord(String key) {
         historySearched.add(key);
         
-        List<String> definitions = slangWordList.get(key);
-
-        if (definitions != null && definitions.size() > 0) {
-            definitions.forEach(definition -> {
-                System.out.println("=======" + definition);
-            });
+        if (isKeyExisted(key)) {
+            List<String> definitions = slangWordList.get(key);
+            int count = 1;
+            
+            for (int i = 0; i < definitions.size(); i++) {
+                System.out.printf("%d. %s\n", count++, definitions.get(i).trim());
+            }
         } else {
             System.out.println("Could not find " + key);
         }
+
+        System.out.println();
     }
     
     public static void SearchByDefinition(String definition) {
@@ -132,12 +153,16 @@ public class Main {
         }
 
         if (words.size() > 0) {
-            words.forEach(word -> {
-                System.out.println("=======" + word);
-            });
+            int count = 1;
+
+            for (int i = 0; i < words.size(); i++) {
+                System.out.printf("%d. %s\n", count++, words.get(i).trim());
+            }
         } else {
             System.out.println("Could not find " + definition);
         }
+        
+        System.out.println();
     }
     
     public static boolean isKeyExisted(String key) {
@@ -146,10 +171,13 @@ public class Main {
     
     public static void ShowHistory() {
         System.out.println("================= Search History ==================");
+        int count = 1;
         
-        historySearched.forEach(word -> {
-            System.out.println(word);
-        });
+        for (int i = 0; i < historySearched.size(); i++) {
+            System.out.printf("%d. %s\n", count++, historySearched.get(i));
+        }
+
+        System.out.println();
     }
     
     public static void AddNewSlangWord(String key, String definition) {
@@ -175,7 +203,70 @@ public class Main {
             slangWordList.put(key, definitions);
         }
         
-        System.out.println("Added new slang word successfully!");
+        System.out.println("Added new slang word successfully!\n");
+    }
+    
+    public static void EditSlangWord(String key) {
+        System.out.println("Definitions:");
+
+        List<String> definitions = slangWordList.get(key);
+        List<String> tempDefinitions = new ArrayList();
+        
+        definitions.forEach((String def) -> {
+            tempDefinitions.add(def);
+        });
+        
+        int count = 1;
+
+        for (int i = 0; i < definitions.size(); i++) {
+            System.out.printf("%d. %s\n", count++, definitions.get(i).trim());
+        }
+        System.out.println();
+        
+        System.out.print("Which one you want to modify?: ");
+        int idx = sc.nextInt();
+        sc.nextLine();
+        System.out.println();
+        
+        System.out.println("Choose an action :");
+        System.out.println("\t1. Add new definition");
+        System.out.println("\t2. Delete definition");
+        System.out.println("\t3. Replace with a new definition");
+        System.out.print("Enter your choice: ");
+        int choice = sc.nextInt();
+        sc.nextLine();
+        boolean isEdited = true;
+        
+        idx -= 1;
+        
+        if (choice == 1) {
+            tempDefinitions.remove(idx);
+
+            System.out.print("Enter new definition: ");
+            String newDefinition = sc.nextLine();
+            
+            tempDefinitions.add(newDefinition);
+            slangWordList.put(key, tempDefinitions);
+        } else if (choice == 2) {
+            if (tempDefinitions.size() == 1) {
+                isEdited = false;
+                System.out.println("Could not perform this action!");
+            } else {
+                tempDefinitions.remove(idx);
+                slangWordList.put(key, tempDefinitions);
+            }
+        } else if (choice == 3) {
+            System.out.print("Enter the replace definition: ");            
+            String newDefinition = sc.nextLine();
+            
+            tempDefinitions.add(newDefinition);
+            slangWordList.put(key, tempDefinitions);
+        }
+
+        if (isEdited) {
+            System.out.println("Edited successfully!");
+        }
+        System.out.println();
     }
         
     public static boolean DeleteSlangWord(String deleteKey) {
