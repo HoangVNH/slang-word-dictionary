@@ -45,12 +45,14 @@ public class Main {
                     System.out.print("Type any word: ");
                     String slangWord = sc.nextLine().toUpperCase();
                     SearchBySlangWord(slangWord);
+                    FileHandler.WriteSeachHistoryToFile(historySearched);
                     break;
                 case "2": {
                     sc = new Scanner(System.in);
                     System.out.print("Type any definition: ");
                     String definition = sc.nextLine().toUpperCase();
                     SearchByDefinition(definition);
+                    FileHandler.WriteSeachHistoryToFile(historySearched);
                     break;
                 }
                 case "3":
@@ -120,7 +122,6 @@ public class Main {
                     break;
                 case "11": {
                     FileHandler.WriteSlangWordListToFile(slangWordList);
-                    FileHandler.WriteSeachHistoryToFile(historySearched);
                     System.out.println("Saving data to files...\n");
                     break OUTER;
                 }
@@ -231,24 +232,21 @@ public class Main {
         
         System.out.print("Which one you want to modify?: ");
         int idx = sc.nextInt();
+        idx -= 1;
         sc.nextLine();
         System.out.println();
         
         System.out.println("Choose an action :");
         System.out.println("\t1. Add new definition");
-        System.out.println("\t2. Delete definition");
-        System.out.println("\t3. Replace with a new definition");
+        System.out.println("\t2. Delete a definition");
+        System.out.println("\t3. Edit a definition");
         System.out.print("Enter your choice: ");
         int choice = sc.nextInt();
         sc.nextLine();
         boolean isEdited = true;
-        
-        idx -= 1;
-        
-        if (choice == 1) {
-            tempDefinitions.remove(idx);
 
-            System.out.print("Enter new definition: ");
+        if (choice == 1) {
+            System.out.print("Enter new definition: ");            
             String newDefinition = sc.nextLine();
             
             tempDefinitions.add(newDefinition);
@@ -262,10 +260,10 @@ public class Main {
                 slangWordList.put(key, tempDefinitions);
             }
         } else if (choice == 3) {
-            System.out.print("Enter the replace definition: ");            
+            System.out.print("Enter new definition: ");
             String newDefinition = sc.nextLine();
-            
-            tempDefinitions.add(newDefinition);
+
+            tempDefinitions.set(idx, newDefinition);
             slangWordList.put(key, tempDefinitions);
         }
 
@@ -285,6 +283,7 @@ public class Main {
     }
     
     public static String RandomizeSlangWord() {
+        // Tham khao thuat toan random a key in HashMap
         Object[] keys = slangWordList.keySet().toArray();
         String randomSlangWord = (String) keys[new Random().nextInt(keys.length)];
         
